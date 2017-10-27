@@ -19,6 +19,10 @@ data <- full_join(candidates, contributions, by = c("cand_id"))
 #wrangled data
 data <- data %>%
   select("cand_party_affiliation", "transaction_type", "entity_type", "transaction_amt")
+filter(data, !is.na(entity_type))
+filter(data, !is.na(transaction_type))
+filter(data, !is.na(transaction_amt))
+filter(data, !is.na(cand_party_affiliation))
 ```
 ```{r}
 #function to generalize analysis
