@@ -13,11 +13,11 @@ load("committees.rda")
 load("contributions.rda")
 ```
 ```{r}
-#use of join
+#use of full_join via cand_id to join candidates data set with contributions dataset in order to include party affiliation with the data
 data <- full_join(candidates, contributions, by = c("cand_id"))
 
 #wrangled data
-data %>%
+data <- data %>%
   select("cand_party_affiliation", "transaction_type", "entity_type", "transaction_amt")
 ```
 ```{r}
