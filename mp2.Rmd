@@ -42,3 +42,4 @@ entity <- function(entities) {
 entity(entities = "CCM")
 ```
 #blog post explaining
+The function `party` sorts the data by `cand_party_affiliation` and shows the amount of times each specific entity (such as an organization or a committee) contributed to a specified party. The function `entities` sorts the data by `entity_type` and will show how many times a each party recieved a contribution from a specified entity.
