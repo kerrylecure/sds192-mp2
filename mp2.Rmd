@@ -18,11 +18,13 @@ data <- full_join(candidates, contributions, by = c("cand_id"))
 
 #wrangled data
 data <- data %>%
-  select("cand_party_affiliation", "transaction_type", "entity_type", "transaction_amt")
-filter(data, !is.na(entity_type))
-filter(data, !is.na(transaction_type))
-filter(data, !is.na(transaction_amt))
-filter(data, !is.na(cand_party_affiliation))
+  select("cand_party_affiliation", "transaction_type", "entity_type", "transaction_amt") %>%
+  filter(!is.na(entity_type)) %>%
+  filter(!is.na(transaction_type)) %>%
+  filter(!is.na(transaction_amt)) %>%
+  filter(!is.na(cand_party_affiliation)) %>%
+  add_count(entity_type)
+data
 ```
 ```{r}
 #function to generalize analysis
@@ -45,5 +47,10 @@ entity <- function(entities) {
 }
 entity(entities = "CCM")
 ```
+```{r}
+ggplot(data, aes(x = cand_party_affiliation, y = n, fill = entity_type)) +
+  geom_bar(stat = "identity")
+```
+
 #blog post explaining
 The function `party` sorts the data by `cand_party_affiliation` and shows the amount of times each specific entity (such as an organization or a committee) contributed to a specified party. The function `entities` sorts the data by `entity_type` and will show how many times a each party recieved a contribution from a specified entity.
