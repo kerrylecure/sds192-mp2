@@ -13,6 +13,8 @@ load("committees.rda")
 load("contributions.rda")
 ```
 ```{r}
-full_join(candidates, contributions, by = c("cand_id"))
+data <- full_join(candidates, contributions, by = c("cand_id"))
+data %>%
+  select("cand_party_affiliation", "transaction_type", "entity_type", "transaction_amt")
 ```
 
