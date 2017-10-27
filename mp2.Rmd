@@ -5,7 +5,7 @@ date: "October 31, 2017"
 output: html_document
 ---
 
-```{r, include=FALSE}
+```{r, message=FALSE}
 library(tidyverse)
 load("house_elections.rda")
 load("candidates.rda")
