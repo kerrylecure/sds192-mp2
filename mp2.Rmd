@@ -13,6 +13,11 @@ load("committees.rda")
 load("contributions.rda")
 ```
 ```{r}
-
+full_join(candidates, contributions, by = c("cand_id"))
+```
+```{r}
+glimpse(contributions)
+glimpse(candidates)
+glimpse(committees)
 ```
 
