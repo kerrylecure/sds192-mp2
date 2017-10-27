@@ -13,8 +13,24 @@ load("committees.rda")
 load("contributions.rda")
 ```
 ```{r}
+#use of join
 data <- full_join(candidates, contributions, by = c("cand_id"))
+
+#wrangled data
 data %>%
   select("cand_party_affiliation", "transaction_type", "entity_type", "transaction_amt")
+```
+#blog post explaining
+
+
+```{r}
+#function to generalize analysis
+party <- function(party_id) {
+  data %>%
+    filter(cand_party_affiliation == cand_id) %>%
+    group_by(transaction_amt) %>%
+    summarize(entity_type = n_distinct(entity_type))
+}
+party(party_id = "DEM")
 ```
 
