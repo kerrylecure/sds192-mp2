@@ -7,6 +7,7 @@ output: html_document
 
 ```{r, message=FALSE}
 library(tidyverse)
+library(RColorBrewer)
 load("house_elections.rda")
 load("candidates.rda")
 load("committees.rda")
@@ -45,7 +46,11 @@ entity(entities = "CCM")
 ```
 ```{r}
 ggplot(data, aes(x = cand_party_affiliation, y = n, fill = entity_type)) +
-  geom_bar(stat = "identity", position = "dodge")
+  geom_bar(stat = "identity", position = "dodge") +
+  xlab("Political Party") +
+  ylab("Number of times an entity contributed") +
+  guides(fill = guide_legend(title = "Type of Entity")) +
+  scale_fill_brewer(palette = "Set1")
 ```
 
 #blog post explaining
