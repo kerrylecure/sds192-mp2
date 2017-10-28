@@ -17,9 +17,9 @@ load("contributions.rda")
 data <- full_join(candidates, contributions, by = c("cand_id"))
 data <- data %>%
   select("cand_party_affiliation", "entity_type") %>% #we determined that these were going to be necessary for what we were looking for
-  filter(entity_type == c("CCM", "CAN", "COM", "IND", "ORG", "PAC", "PTY"), !is.na(c("entity_type", "transaction_type", "transaction_amt", "cand_party_affiliation"))) %>% #we filtered the two main parties 
+  filter(entity_type == c("CCM", "CAN", "COM", "IND", "ORG", "PAC", "PTY"), !is.na(c("entity_type", "transaction_type", "transaction_amt", "cand_party_affiliation"))) %>% #we filtered out entity types that did not have a known value per the FEC (i.e. a category that did not have a name)
   group_by(cand_party_affiliation) %>%
-  count(entity_type)
+  count(entity_type) #this was done done in order to count how many times the entity_type occurred per party
 data
 ```
 ```{r}
