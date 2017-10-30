@@ -16,41 +16,45 @@ load("contributions.rda")
 ```{r}
 #use of full_join via cand_id to join candidates data set with contributions dataset in order to include party affiliation with the data
 data <- full_join(candidates, contributions, by = c("cand_id"))
-data <- data %>%
+graphdata <- data %>%
+  na.omit() %>% #to omit data with n/a
   select("cand_party_affiliation", "entity_type") %>% #we determined that these were going to be necessary for what we were looking for
-  filter(entity_type == c("CCM", "CAN", "COM", "IND", "ORG", "PAC", "PTY"), !is.na(c("entity_type", "transaction_type", "transaction_amt", "cand_party_affiliation"))) %>% #we filtered out entity types that did not have a known value per the FEC (i.e. a category that did not have a name)
+  filter(cand_party_affiliation == c("REP", "DEM")) %>% #we filtered out entity types that did not have a known value per the FEC (i.e. a category that did not have a name)
   group_by(cand_party_affiliation) %>%
   count(entity_type) #this was done done in order to count how many times the entity_type occurred per party
-data
+funcdata <- data %>%
+  na.omit() %>%
+  select("cand_party_affiliation", "entity_type") %>%
+  filter(!is.na("cand_party_affiliation")) %>%
+  group_by(cand_party_affiliation) %>%
+  count(entity_type)
 ```
 ```{r}
 #function to generalize analysis
 party <- function(party_id) {
-  data %>%
+  funcdata %>%
     filter(cand_party_affiliation == party_id) %>%
     group_by(entity_type) %>%
-    summarize(total_entity = n()) %>%
-    arrange(desc(total_entity))
+    arrange(desc(n))
 }
 party(party_id = "DEM")
 party(party_id = "REP")
 
 entity <- function(entities) {
-  data %>%
+  funcdata %>%
     filter(entity_type == entities) %>%
     group_by(cand_party_affiliation) %>%
-    summarize(total_party = n()) %>%
-    arrange(desc(total_party))
+    arrange(desc(n))
 }
 entity(entities = "CCM")
 ```
 ```{r}
-ggplot(data, aes(x = cand_party_affiliation, y = n, fill = entity_type)) +
+ggplot(graphdata, aes(x = cand_party_affiliation, y = n, fill = entity_type)) +
   geom_bar(stat = "identity", position = "dodge") +
   xlab("Political Party") +
   ylab("Number of times an entity contributed") +
   guides(fill = guide_legend(title = "Type of Entity")) +
-  scale_fill_brewer(palette = "Set1")
+  scale_fill_brewer(palette = "Set1", labels = c("Other", "Candidate", "Candidate Committee", "Committee", "Individual", "Organization", "Political Action Committee", "Party Organization"))
 ```
 
 This graph displays the number of times that a donation was made from various types of entities. 
